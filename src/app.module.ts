@@ -6,7 +6,7 @@ import { UserModule } from './user/user.module';
     UserModule,
     MongooseModule.forRootAsync({
       useFactory: () => ({
-        uri: 'mongodb://localhost:27017/nest',
+        uri: 'mongodb://localhost:27017/test',
         useNewUrlParser: true,
         useUnifiedTopology: true,
       }),

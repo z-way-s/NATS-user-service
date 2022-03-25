@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common';
 import { ClientsModule, Transport } from '@nestjs/microservices';
+import { MongooseModule } from '@nestjs/mongoose';
 import { USER_SERVICE } from '../app.constant';
+import { UserSchema } from './models/user.model';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
 
@@ -15,6 +17,7 @@ import { UserService } from './user.service';
         },
       },
     ]),
+    MongooseModule.forFeature([{ name: 'users', schema: UserSchema }]),
   ],
   controllers: [UserController],
   providers: [UserService],
