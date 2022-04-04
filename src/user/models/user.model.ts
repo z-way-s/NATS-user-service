@@ -36,11 +36,12 @@ export const UserSchema = new mongoose.Schema({
   },
 });
 
-export interface UserModel extends UserInterface, mongoose.Document {
+export interface UserModel extends User, mongoose.Document {
   id: string;
 }
 
-export interface UserInterface {
+export interface User {
+  id: string;
   login: string;
   password?: string;
   email: string;

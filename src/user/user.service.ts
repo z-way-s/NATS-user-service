@@ -2,7 +2,7 @@ import { Injectable, Inject, HttpException } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { UserInterface, UserModel } from './models/user.model';
+import { User, UserModel } from './models/user.model';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ErrorResponse } from 'src/app.constant';
@@ -13,9 +13,7 @@ export class UserService {
     @InjectModel('users') private readonly userModel: Model<UserModel>,
   ) {}
 
-  async createUser(
-    user: CreateUserDto,
-  ): Promise<UserInterface | ErrorResponse> {
+  async createUser(user: CreateUserDto): Promise<User | ErrorResponse> {
     let newUser;
     try {
       newUser = new this.userModel(user);
@@ -33,6 +31,7 @@ export class UserService {
     }
     const result = await newUser.save();
     return {
+      id: result._id,
       login: result.login,
       email: result.email,
       name: result.name,
@@ -42,7 +41,7 @@ export class UserService {
     };
   }
 
-  async getUsers(): Promise<UserInterface[] | ErrorResponse> {
+  async getUsers(): Promise<User[] | ErrorResponse> {
     const users = await this.userModel.find();
     if (!users) {
       return Promise.reject({
@@ -66,7 +65,7 @@ export class UserService {
   async updateUser(
     id: string,
     user: UpdateUserDto,
-  ): Promise<UserInterface | ErrorResponse> {
+  ): Promise<User | ErrorResponse> {
     console.log(id);
     let result;
     try {
@@ -99,6 +98,7 @@ export class UserService {
       });
     }
     return {
+      id: result._id,
       login: result.login,
       email: result.email,
       name: result.name,
@@ -108,10 +108,7 @@ export class UserService {
     };
   }
 
-  async login(
-    login: string,
-    password: string,
-  ): Promise<UserInterface | ErrorResponse> {
+  async login(login: string, password: string): Promise<User | ErrorResponse> {
     const user = await this.userModel.findOne({ login, password });
     if (!user) {
       return Promise.reject({
@@ -120,6 +117,7 @@ export class UserService {
       });
     }
     return {
+      id: user._id,
       login: user.login,
       email: user.email,
       name: user.name,
