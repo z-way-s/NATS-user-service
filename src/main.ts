@@ -17,6 +17,6 @@ async function bootstrap() {
   });
   await app.startAllMicroservices();
   await app.listen(3001);
-  console.log(`App Gateway is running on: ${await app.getUrl()}`);
+  console.log(`User Service  is running on: ${await app.getUrl()}`);
 }
 bootstrap();
